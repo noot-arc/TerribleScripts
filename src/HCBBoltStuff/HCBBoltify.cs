@@ -8,7 +8,7 @@ namespace nootarc
 
     [BepInAutoPlugin]
     [BepInProcess("h3vr.exe")]
-    public partial class HCBBoltify : BaseUnityPlugin
+    public partial class HCBBoltify : MonoBehaviour
     {
         public FVRFireArm FireArm;
         public GameObject Bolt;
@@ -33,10 +33,8 @@ namespace nootarc
         }
         private void Awake()
         {
-            Logger = base.Logger;
             Hook();
             //Logger.LogMessage($"HCBBoltify is awake!");
         }
-        internal new static ManualLogSource Logger { get; private set; }
     }
 }
