@@ -16,25 +16,24 @@ namespace nootarc
         void Hook()
         {
             GM.CurrentSceneSettings.ShotFiredEvent += OnShotFired;
-            //Logger.LogMessage($"HCBBoltify hook successful!");
+            TerribleScriptsBase.Log.LogInfo("HCBBoltify hook successful!");
         }
 
         private void OnShotFired(FVRFireArm firearm)
         {
-            //Logger.LogMessage("OnShotFired called!");
+            TerribleScriptsBase.Log.LogInfo("OnShotFired called!");
             if(FireArm != null && firearm == FireArm)
             {
                 GameObject gameObject = Object.Instantiate<GameObject>(Bolt, firearm.MuzzlePos.position, firearm.MuzzlePos.rotation);
                 HCBBolt component = gameObject.GetComponent<HCBBolt>();
-                component.Fire(firearm.MuzzlePos.forward, firearm.MuzzlePos.position, 1f);
-                //Logger.LogMessage("Fire!");
                 component.SetCookedAmount(1f);
+                component.Fire(firearm.MuzzlePos.forward, firearm.MuzzlePos.position, 1f);
+                TerribleScriptsBase.Log.LogInfo($"Fire @ {firearm.MuzzlePos.position}!");
             }
         }
         private void Awake()
         {
             Hook();
-            //Logger.LogMessage($"HCBBoltify is awake!");
         }
     }
 }

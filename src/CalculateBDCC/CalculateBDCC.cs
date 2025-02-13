@@ -2,6 +2,7 @@
 using FistVR;
 using UnityEngine;
 
+//deprecated
 namespace nootarc
 {
     [CreateAssetMenu(menuName = "Misc/CalculateBDCC", fileName = "NewBDCCurve")]
