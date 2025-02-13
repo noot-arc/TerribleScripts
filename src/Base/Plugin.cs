@@ -16,11 +16,6 @@ namespace nootarc
         internal static ManualLogSource Log;
         private void Awake()
         {
-            configDebug = Config.Bind("General", "DebugState", false, "Enable debug messages?");
-            if (configDebug.Value)
-            {
-                Log = base.Logger;
-            }
             var customFile = new ConfigFile(Path.Combine(Paths.ConfigPath, "TerribleScripts.cfg"), true);
         }
         
