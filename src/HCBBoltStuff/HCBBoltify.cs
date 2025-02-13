@@ -22,7 +22,8 @@ namespace nootarc
         {
             if(FireArm != null && firearm == FireArm)
             {
-                GameObject gameObject = Object.Instantiate<GameObject>(Bolt, firearm.MuzzlePos.position, firearm.MuzzlePos.rotation);
+                
+                GameObject gameObject = Object.Instantiate<GameObject>(Bolt, firearm.CurrentMuzzle.position, firearm.CurrentMuzzle.rotation);
                 HCBBolt component = gameObject.GetComponent<HCBBolt>();
                 component.SetCookedAmount(1f);
                 component.Fire(firearm.MuzzlePos.forward, firearm.MuzzlePos.position, 1f);
