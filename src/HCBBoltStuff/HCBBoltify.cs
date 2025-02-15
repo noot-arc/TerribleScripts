@@ -3,15 +3,12 @@ using BepInEx.Logging;
 using FistVR;
 using UnityEngine;
 
-namespace nootarc
+namespace nootarc.HCBBoltStuff
 {
-
-    [BepInAutoPlugin]
-    [BepInProcess("h3vr.exe")]
-    public partial class HCBBoltify : MonoBehaviour
+    public class HCBBoltify : MonoBehaviour
     {
         public FVRFireArm FireArm;
-        public GameObject Bolt;
+        public FVRFireArmChamber Chamber;
         
         void Hook()
         {
@@ -22,7 +19,10 @@ namespace nootarc
         {
             if(FireArm != null && firearm == FireArm)
             {
-                
+
+                FVRFireArmRound fVRFireArmRound = Chamber.GetRound();
+                RoundBoltType roundBoltType = fVRFireArmRound.GetComponent<RoundBoltType>();
+                GameObject Bolt = roundBoltType.RoundHCBBolt;
                 GameObject gameObject = Object.Instantiate<GameObject>(Bolt, firearm.CurrentMuzzle.position, firearm.CurrentMuzzle.rotation);
                 HCBBolt component = gameObject.GetComponent<HCBBolt>();
                 component.SetCookedAmount(1f);
