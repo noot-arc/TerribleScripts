@@ -1,6 +1,4 @@
-﻿using BepInEx;
-using FistVR;
-using UnityEngine;
+﻿using UnityEngine;
 
 //deprecated
 namespace nootarc

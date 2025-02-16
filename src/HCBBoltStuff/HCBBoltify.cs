@@ -1,7 +1,6 @@
-﻿using BepInEx;
-using BepInEx.Logging;
-using FistVR;
+﻿using FistVR;
 using UnityEngine;
+using BepInEx;
 
 namespace nootarc.HCBBoltStuff
 {
@@ -29,7 +28,7 @@ namespace nootarc.HCBBoltStuff
                 component.Fire(firearm.MuzzlePos.forward, firearm.MuzzlePos.position, 1f);
             }
         }
-        private void Awake()
+        public void Awake()
         {
             Hook();
         }

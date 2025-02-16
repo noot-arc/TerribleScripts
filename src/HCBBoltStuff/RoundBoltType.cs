@@ -2,7 +2,7 @@
 
 namespace nootarc.HCBBoltStuff
 {
-    internal class RoundBoltType
+    public class RoundBoltType : MonoBehaviour
     {
         public GameObject RoundHCBBolt;
     }
