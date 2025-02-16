@@ -20,7 +20,7 @@ namespace nootarc.HCBBoltStuff
             {
 
                 FVRFireArmRound fVRFireArmRound = Chamber.GetRound();
-                RoundBoltTypeAndCounter roundBoltType = fVRFireArmRound.GetComponent<RoundBoltTypeAndCounter>();
+                RoundHCBBoltType roundBoltType = fVRFireArmRound.GetComponent<RoundHCBBoltType>();
                 GameObject Bolt = roundBoltType.RoundHCBBolt;
                 GameObject gameObject = Object.Instantiate<GameObject>(Bolt, firearm.CurrentMuzzle.position, firearm.CurrentMuzzle.rotation);
                 HCBBolt component = gameObject.GetComponent<HCBBolt>();

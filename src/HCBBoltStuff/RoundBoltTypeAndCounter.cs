@@ -2,9 +2,8 @@
 
 namespace nootarc.HCBBoltStuff
 {
-    public class RoundBoltTypeAndCounter : MonoBehaviour
+    public class RoundHCBBoltType : MonoBehaviour
     {
-        private int BoltRoundCounter;
         public GameObject RoundHCBBolt;
     }
 }
