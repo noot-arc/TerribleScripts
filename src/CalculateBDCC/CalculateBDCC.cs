@@ -4,7 +4,7 @@
 namespace nootarc
 {
     [CreateAssetMenu(menuName = "Misc/CalculateBDCC", fileName = "NewBDCCurve")]
-    public partial class ScaleBDCC : ScriptableObject
+    public class ScaleBDCC : ScriptableObject
     {
         [ContextMenu("Scale Curve")]
         public void ScaleCurve()
