@@ -15,7 +15,7 @@ namespace nootarc.HCBBoltStuff
 
         private void OnShotFired(FVRFireArm firearm)
         {
-            if(firearm == FireArm && Chamber.GetRound().GetComponent<RoundHCBBoltType>() != null)
+            if(FireArm != null && firearm == FireArm && (Chamber.m_round.GetComponent<RoundHCBBoltType>() != null))
             {
 
                 FVRFireArmRound fVRFireArmRound = Chamber.GetRound();
