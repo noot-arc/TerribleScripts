@@ -1,6 +1,5 @@
 ﻿using FistVR;
 using UnityEngine;
-using BepInEx;
 
 namespace nootarc.HCBBoltStuff
 {
@@ -16,14 +15,14 @@ namespace nootarc.HCBBoltStuff
 
         private void OnShotFired(FVRFireArm firearm)
         {
-            if(FireArm != null && firearm == FireArm)
+            if(firearm == FireArm && Chamber.GetRound().GetComponent<RoundHCBBoltType>() != null)
             {
 
                 FVRFireArmRound fVRFireArmRound = Chamber.GetRound();
                 RoundHCBBoltType roundBoltType = fVRFireArmRound.GetComponent<RoundHCBBoltType>();
                 GameObject Bolt = roundBoltType.RoundHCBBolt;
-                GameObject gameObject = Object.Instantiate<GameObject>(Bolt, firearm.CurrentMuzzle.position, firearm.CurrentMuzzle.rotation);
-                HCBBolt component = gameObject.GetComponent<HCBBolt>();
+                GameObject instantiate = Object.Instantiate(Bolt, firearm.CurrentMuzzle.position, firearm.CurrentMuzzle.rotation);
+                HCBBolt component = instantiate.GetComponent<HCBBolt>();
                 component.SetCookedAmount(1f);
                 component.Fire(firearm.MuzzlePos.forward, firearm.MuzzlePos.position, 1f);
             }

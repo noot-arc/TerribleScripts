@@ -7,6 +7,7 @@
         <AssemblyTitle>TerribleScripts</AssemblyTitle>
         <Description>Scripts for my mods. It's like i'm a real modder now!</Description>
         <PackageProjectUrl>https://github.com/noot-arc/TerribleScripts</PackageProjectUrl>
+        <RootNamespace>plugin</RootNamespace>
     </PropertyGroup>
 
     <!-- Probably don't need to touch these -->
