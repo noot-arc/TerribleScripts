@@ -7,7 +7,6 @@ namespace nootarc.HCBBoltStuff;
 public class TrepangExplodeyBolt : MonoBehaviour
 {
     public ParticleSystem fuseParticles;
-    public HCBBolt HCBBolt;
     public AudioEvent fuseSound;
     public float fuseTime = 3f;
     public float startFuseTime = 3f;
@@ -22,7 +21,7 @@ public class TrepangExplodeyBolt : MonoBehaviour
         num2 = Mathf.Pow(num2, 2f);
         if (fuseTick <= 0f)
         {
-            fuseTick = Mathf.Lerp(0.4f, 0.02f, num2);
+            fuseTick = Mathf.Lerp(0.3f, 0.01f, num2);
             float num3 = Mathf.Lerp(1.8f, 3.7f, num2);
             SM.PlayCoreSoundOverrides(FVRPooledAudioType.Generic, fuseSound, transform.position, new Vector2(1f, 1f), new Vector2(num3, num3));
             fuseParticles.Emit(2);
@@ -49,7 +48,7 @@ public class TrepangExplodeyBolt : MonoBehaviour
                 }
             }
 
-            Destroy(this);
+            Object.Destroy(base.gameObject);
         }
     }
 }
