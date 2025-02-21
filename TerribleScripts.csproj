@@ -50,6 +50,9 @@
         <PackageReference Include="BepInEx.Core" Version="5.4.17" />
         <PackageReference Include="H3VR.GameLibs" Version="0.111.5" />
     </ItemGroup>
+    <ItemGroup>
+      <Folder Include="src\WeaponModifications\" />
+    </ItemGroup>
 
     <!-- When in debug mode, also build mono debugging symbols (Only available on Windows) -->
     <Target Name="MonoDebugSymbols" AfterTargets="PostBuildEvent" Condition="'$(DebugType)' == 'full' AND '$(OS)' == 'Windows_NT'">
