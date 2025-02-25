@@ -50,7 +50,7 @@ public class TrepangExplodeyBolt : MonoBehaviour
 
     public void Update()
     {
-        if (!gameObject.GetComponent<HCBBolt>() || gameObject.GetComponent<HCBBolt>().m_isTickingDownToDestroy)
+        if (!gameObject.GetComponent<HCBBolt>() || !gameObject.GetComponent<HCBBolt>().m_isFlying)
             StartExplosion();
     }
 }
