@@ -2,7 +2,7 @@
     <!-- Plugin name, version, etc. -->
     <PropertyGroup>
         <AssemblyName>TerribleScripts</AssemblyName>
-        <Version>0.2.2</Version>
+        <Version>0.2.3</Version>
         <Authors>nootarc</Authors>
         <AssemblyTitle>TerribleScripts</AssemblyTitle>
         <Description>Scripts for my mods. It's like i'm a real modder now!</Description>
@@ -51,7 +51,9 @@
         <PackageReference Include="H3VR.GameLibs" Version="0.111.5" />
     </ItemGroup>
     <ItemGroup>
-      <Folder Include="src\WeaponModifications\" />
+      <Reference Include="OpenScripts2">
+        <HintPath>packages\OpenScripts2_MeatKit.dll</HintPath>
+      </Reference>
     </ItemGroup>
 
     <!-- When in debug mode, also build mono debugging symbols (Only available on Windows) -->
