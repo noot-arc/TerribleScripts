@@ -13,31 +13,31 @@ public class IntegratedMagazineButtonReplenish : MonoBehaviour
     private FVRViveHand hand;
 
     public void Update()
+    
     {
-        isReplenishing = false;
+        hand = firearm.m_hand;
         if (hand != null)
         {
-            if (hand.IsInStreamlinedMode && hand.Input.AXButtonDown)
+            if (hand.IsInStreamlinedMode && hand.Input.AXButtonDown || 
+                !hand.IsInStreamlinedMode && hand.Input.TouchpadDown && Vector2.Angle(hand.Input.TouchpadAxes, Vector2.down) < 45f)
             {
                 isReplenishing = true;
             }
-            else if (!hand.IsInStreamlinedMode && hand.Input.TouchpadDown &&
-                     Vector2.Angle(hand.Input.TouchpadAxes, Vector2.down) < 45f)
+
+            else if (hand.IsInStreamlinedMode && !hand.Input.AXButtonDown || 
+                     !hand.IsInStreamlinedMode && !hand.Input.TouchpadDown)
             {
-                isReplenishing = true;
+                isReplenishing = false;
             }
         }
-        hand = firearm.m_hand;
         if (replenishTimer > 0)
         {
             this.replenishTimer -= Time.deltaTime;
         }
-
         if (isReplenishing && this.replenishTimer <= 0)
         {
             this.firearm.Magazine.AddRound(RoundClass, false, false);
             replenishTimer = replenishRate;
         }
-        
     }
 }
