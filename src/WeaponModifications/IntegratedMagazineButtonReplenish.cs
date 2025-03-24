@@ -5,17 +5,26 @@ namespace nootarc.WeaponModifications;
 
 public class IntegratedMagazineButtonReplenish : MonoBehaviour
 {
-    public FireArmRoundClass RoundClass;
+    [Tooltip("The round class that should be replenished by default if the gun spawns empty")] public FireArmRoundClass FallbackRoundClass;
     public FVRFireArm firearm;
-    public float replenishRate;
-    [HideInInspector] public bool isReplenishing = false;
-    [HideInInspector] public float replenishTimer = 0;
+    [Tooltip("Delay in seconds between loading rounds")] public float replenishRate = 0.066f;
+    public bool ShouldMakeSoundOnIndividualRoundReplenish;
+    [HideInInspector] public bool isReplenishing = true;
+    [HideInInspector] public float replenishTimer;
+    [HideInInspector] public FireArmRoundClass RoundClass;
     private FVRViveHand hand;
 
+    public void Awake()
+    {
+        RoundClass = FallbackRoundClass;
+    }
     public void Update()
-    
     {
         hand = firearm.m_hand;
+        if (RoundClass != firearm.FChambers[0].GetRound().RoundClass && firearm.FChambers[0].GetRound() != null)
+        {
+            RoundClass = firearm.FChambers[0].GetRound().RoundClass;
+        }
         if (hand != null)
         {
             if (hand.IsInStreamlinedMode && hand.Input.AXButtonDown || 
@@ -23,21 +32,20 @@ public class IntegratedMagazineButtonReplenish : MonoBehaviour
             {
                 isReplenishing = true;
             }
-
             else if (hand.IsInStreamlinedMode && !hand.Input.AXButtonDown || 
                      !hand.IsInStreamlinedMode && !hand.Input.TouchpadDown)
             {
                 isReplenishing = false;
             }
-        }
-        if (replenishTimer > 0)
-        {
-            this.replenishTimer -= Time.deltaTime;
-        }
-        if (isReplenishing && this.replenishTimer <= 0)
-        {
-            this.firearm.Magazine.AddRound(RoundClass, false, false);
-            replenishTimer = replenishRate;
+            if (replenishTimer > 0)
+            {
+                this.replenishTimer -= Time.deltaTime;
+            }
+            if (isReplenishing && this.replenishTimer <= 0)
+            {
+                this.firearm.Magazine.AddRound(RoundClass, ShouldMakeSoundOnIndividualRoundReplenish, false);
+                replenishTimer = replenishRate;
+            }
         }
     }
 }
