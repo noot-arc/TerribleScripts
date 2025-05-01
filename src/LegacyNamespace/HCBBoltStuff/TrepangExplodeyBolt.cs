@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using FistVR;
 using UnityEngine;
 
+//i forgot how this code works, aside from having a bunch of expensive calls.
+//appropriated the sound and particle stuff from the multi-timing hand grenade. i think.
 namespace nootarc.HCBBoltStuff
 {
     public class TrepangExplodeyBolt : MonoBehaviour
