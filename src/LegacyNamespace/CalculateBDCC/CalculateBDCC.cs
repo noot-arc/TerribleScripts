@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 
-//deprecated
+//This code was made to increase parity between the Display Data & actual ballistics of HCB Bolts by recalculating the
+//BDCC on both; the vanilla implementation is to manually adjust the DD's speed and weight values. and something else.
+//not recommended for usage since it Will break stuff
 namespace nootarc
 {
     [CreateAssetMenu(menuName = "Misc/CalculateBDCC", fileName = "NewBDCCurve")]
