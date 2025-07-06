@@ -15,3 +15,6 @@ Personal H3VR modding scripts. Mostly HCB Bolt stuff because nobody else has wor
 ### ReplenishFirearmMagazineAutomagically
 - Replenish the firearm's magazine while holding down or toggling a button, with some other additional features.
 - Put it somewhere in the firearm prefab.</br>
+### AmmoCountUIColorShenanigans
+- Takes Graphics objects, Gradients, and puts the color onto the graphics object from the gradient based on the current ammo amount percentage.
+- Not particularly featureful.</br>
