@@ -1,5 +1,5 @@
 # TerribleScripts</br>
-Personal H3VR modding scripts. Mostly HCB Bolt stuff because nobody else has worked with them before, apparently.
+Personal H3VR modding scripts. @ me on discord for features/fixes, i don't check github that often.
 
 # Descriptions:
 
@@ -15,6 +15,11 @@ Personal H3VR modding scripts. Mostly HCB Bolt stuff because nobody else has wor
 ### ReplenishFirearmMagazineAutomagically
 - Replenish the firearm's magazine while holding down or toggling a button, with some other additional features.
 - Put it somewhere in the firearm prefab.</br>
+### ToggleOnGrabRelease
+- Toggles (enables or disables) objects of your choosing when your object is picked up or released
+### Duplicated Muzzle
+- Do not.
+- Basically fires the same rounds that your main muzzle fires w/o interacting with the magazine/chamber
+## Mod Mods
 ### AmmoCountUIColorShenanigans
-- Takes Graphics objects, Gradients, and puts the color onto the graphics object from the gradient based on the current ammo amount percentage.
-- Not particularly featureful.</br>
+- Takes Graphics & LaserLight objects, Gradients, and puts the color onto the graphics/LL object from the gradient based on the current ammo amount percentage.
