@@ -28,10 +28,10 @@ namespace TerribleScripts.WeaponModifications
         {
             if (ParentObject == Parent)
             {
-                for (int i = 0; i < (Objects.Count); i++)
+                for (int i = 0; i < (Objects.Count); i++) //enable or disable all objects on the one that's picked up
                 {
                     Objects[i].SetActive(Enable);
-                    Held = true;
+                    Held = true; //make sure the objects don't come pre-toggled, only toggles when they get released or picked up
                 }
             }
         }
@@ -41,7 +41,7 @@ namespace TerribleScripts.WeaponModifications
             {
                 for (int i = 0; i < (Objects.Count); i++)
                 {
-                    Objects[i].SetActive(!Enable);
+                    Objects[i].SetActive(!Enable); //same thing other way around; dead simple script
                 }
                 Held = false;
             }
