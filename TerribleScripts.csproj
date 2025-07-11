@@ -2,12 +2,13 @@
     <!-- Plugin name, version, etc. -->
     <PropertyGroup>
         <AssemblyName>TerribleScripts</AssemblyName>
-        <Version>0.2.5</Version>
+        <Version>0.2.6</Version>
         <Authors>nootarc</Authors>
         <AssemblyTitle>TerribleScripts</AssemblyTitle>
-        <Description>Scripts for my mods. It's like i'm a real modder now!</Description>
+        <Description>Scripts for my H3VR mods. It's like i'm a real modder now!</Description>
         <PackageProjectUrl>https://github.com/noot-arc/TerribleScripts</PackageProjectUrl>
         <RootNamespace>TerribleScripts</RootNamespace>
+        <Title>Terrible Scripts</Title>
     </PropertyGroup>
 
     <!-- Probably don't need to touch these -->
