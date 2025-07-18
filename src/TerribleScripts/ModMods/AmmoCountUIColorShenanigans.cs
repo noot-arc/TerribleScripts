@@ -1,4 +1,3 @@
-using System;
 using FistVR;
 using System.Collections.Generic;
 using UnityEngine.UI;
@@ -16,8 +15,8 @@ namespace TerribleScripts.ModMods
         public List<Graphic> Graphics;
         [Tooltip("Lasers & Lights to recolor (Uses gradients that come immediately after the graphics ones)")]
         public List<LaserLight> LaserLights;
-        [Tooltip("Materials to recolor the Emissions tint of (uses gradients that come immediately after the Laser Light ones")]
-        public List<Material> EmissionMats;
+        [Tooltip("Line Renderers to recolor the Emissions tint of (uses gradients that come immediately after the Laser Light ones")]
+        public List<LineRenderer> Lines;
         [Tooltip("Gradients to recolor the graphics with; key position is the fullness factor (e.g 0.2f is 20% capacity remaining)")]
         public List<Gradient> Gradients; /*GradientHDR does nothing. oh well*/
         [Tooltip("Firearm :)")]
@@ -37,14 +36,14 @@ namespace TerribleScripts.ModMods
         [HideInInspector] public float CurrentPercentage;
         [HideInInspector] public Color UIColor;
         [HideInInspector] public bool LaserLightsAvailable;
-        [HideInInspector] public bool EmissionMatsAvailable;
+        [HideInInspector] public bool LinesAvailable;
         [HideInInspector] public bool GraphicsAvailable;
         [HideInInspector] public int EmissionColor;
 
         public void Awake()
         {
             if (LaserLights.Count > 0) LaserLightsAvailable = true;
-            if (EmissionMats.Count > 0) EmissionMatsAvailable = true;
+            if (Lines.Count > 0) LinesAvailable = true;
             if (Graphics.Count > 0) GraphicsAvailable = true;
             EmissionColor = Shader.PropertyToID("_EmissionColor"); //so we dont have to do a string lookup
         }
@@ -90,12 +89,18 @@ namespace TerribleScripts.ModMods
                     }
                 }
 
-                if (EmissionMatsAvailable)
+                if (LinesAvailable)
                 {
-                    for (var i = 0; i < (EmissionMats.Count); i++, j++) // same thing for the emission tints
+                    for (var i = 0; i < (Lines.Count); i++, j++) // same thing for the line renderers
                     {
+                        MaterialPropertyBlock PropBlock = new MaterialPropertyBlock();
                         UIColor = Gradients[j].Evaluate(CurrentPercentage);
-                        EmissionMats[i].SetColor(EmissionColor, UIColor);
+                        PropBlock.SetColor(EmissionColor, UIColor);
+                        //this is a bodge. it was supposed to be on mats so you dont
+                        //have to restrict it to line renderers but property blocks
+                        //can only be applied to renderers. the MOMENT i need to
+                        //introduce something else to this script is the moment this bodge fails. for now, it stands
+                        Lines[i].SetPropertyBlock(PropBlock); 
                     }
                 }
                 LoadedChambers = 0; //make sure the number doesn't increase after we're done with it
