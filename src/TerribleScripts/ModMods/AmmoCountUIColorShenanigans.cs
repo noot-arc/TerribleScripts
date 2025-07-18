@@ -1,10 +1,13 @@
+using System;
 using FistVR;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
 
+
 namespace TerribleScripts.ModMods
 {
+    
     public class AmmoCountUIColorShenanigans : MonoBehaviour
     {
         [Header("Note: There should be one gradient per object with them having")]
@@ -13,8 +16,10 @@ namespace TerribleScripts.ModMods
         public List<Graphic> Graphics;
         [Tooltip("Lasers & Lights to recolor (Uses gradients that come immediately after the graphics ones)")]
         public List<LaserLight> LaserLights;
+        [Tooltip("Materials to recolor the Emissions tint of (uses gradients that come immediately after the Laser Light ones")]
+        public List<Material> EmissionMats;
         [Tooltip("Gradients to recolor the graphics with; key position is the fullness factor (e.g 0.2f is 20% capacity remaining)")]
-        public List<Gradient> Gradients;
+        public List<Gradient> Gradients; /*GradientHDR does nothing. oh well*/
         [Tooltip("Firearm :)")]
         public FVRFireArm FireArm;
         [Tooltip("Does your firearm have/uses magazines or is it direct chamber-loaded?")]
@@ -31,14 +36,21 @@ namespace TerribleScripts.ModMods
         [HideInInspector] public int LoadedChambers;
         [HideInInspector] public float CurrentPercentage;
         [HideInInspector] public Color UIColor;
-        [HideInInspector] public bool DelayFlip = true;
+        [HideInInspector] public bool LaserLightsAvailable;
+        [HideInInspector] public bool EmissionMatsAvailable;
+        [HideInInspector] public bool GraphicsAvailable;
+        [HideInInspector] public int EmissionColor;
 
+        public void Awake()
+        {
+            if (LaserLights.Count > 0) LaserLightsAvailable = true;
+            if (EmissionMats.Count > 0) EmissionMatsAvailable = true;
+            if (Graphics.Count > 0) GraphicsAvailable = true;
+            EmissionColor = Shader.PropertyToID("_EmissionColor"); //so we dont have to do a string lookup
+        }
         public void Update() //once again i have 0 clue how to not do this in update
         {
-            DelayFlip = !DelayFlip;
-            if (DelayFlip)
-            {
-                for (int i = 0; i < FireArm.FChambers.Count; i++) //count amount of loaded chambers for mag-less firearms
+                for (var i = 0; i < FireArm.FChambers.Count; i++) //count amount of loaded chambers for mag-less firearms
                 {
                     if (FireArm.FChambers[i].IsFull)
                     {
@@ -57,23 +69,36 @@ namespace TerribleScripts.ModMods
                 }
                 var UnclampedPercentage  = CurrentAmount / MaxCap; // make the current amount into a fraction from 0 to 1
                 CurrentPercentage = Mathf.Clamp01(UnclampedPercentage); // make sure it doesn't escape any bounds
-            
-                if (DelayFlip)
+                
+                var j = 0; // make sure we're going down the gradient list. this would benefit from an entire class but oh well. you live and you dont learn
+
+                if (GraphicsAvailable)
                 {
-                    for (int i = 0; i < (Graphics.Count); i++) // set the colors by taking the color @ the gradient position corresponding to the fraction we just calculated
+                    for (var i = 0; i < (Graphics.Count); i++, j++) // set the colors by taking the color @ the gradient position corresponding to the fraction we just calculated
                     {
-                        UIColor = Gradients[i].Evaluate(CurrentPercentage);
+                        UIColor = Gradients[j].Evaluate(CurrentPercentage);
                         Graphics[i].color = UIColor;
                     }
-                    for (int i = 0; i < (LaserLights.Count); i++) // same thing for the lasers
+                }
+
+                if (LaserLightsAvailable)
+                {
+                    for (var i = 0; i < (LaserLights.Count); i++, j++) // same thing for the lasers
                     {
-                        UIColor = Gradients[i + (Graphics.Count)].Evaluate(CurrentPercentage);
+                        UIColor = Gradients[j].Evaluate(CurrentPercentage);
                         LaserLights[i].color = UIColor;
                     }
                 }
-            
+
+                if (EmissionMatsAvailable)
+                {
+                    for (var i = 0; i < (EmissionMats.Count); i++, j++) // same thing for the emission tints
+                    {
+                        UIColor = Gradients[j].Evaluate(CurrentPercentage);
+                        EmissionMats[i].SetColor(EmissionColor, UIColor);
+                    }
+                }
                 LoadedChambers = 0; //make sure the number doesn't increase after we're done with it
-            }
         }
     }
 }
