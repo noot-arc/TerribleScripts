@@ -29,36 +29,39 @@ namespace TerribleScripts.Animations
         
         public void Update()
         {
-            switch (Object.m_hand.IsInStreamlinedMode)
+            if (Object.m_hand != null)
             {
-                case false:
+                switch (Object.m_hand.IsInStreamlinedMode)
                 {
-                    if (Object.m_hand.Input.TouchpadDown && Object.m_hand.Input.TouchpadAxes.magnitude > 0.1f &&
-                        Vector2.Angle(Object.m_hand.Input.TouchpadAxes, Vector2.left) <=
-                        45f)
+                    case false:
                     {
-                        for (var j = 0; j < Animations.Count; j++)
-                        { if (!Reset && Animation.IsPlaying(Animations[j])) return; } //if one of the animations is playing, don't play another one until its done
-                        Animation.Play(Animations[i]);
-                        i++;
-                        if (PlaySound && Object is FVRFireArm)
-                        { Firearm.PlayAudioEvent(FirearmAudioEventType.FireSelector); }
-                        if (i >= Animations.Count) i = 0; //make sure the animations played are sequential and looping
+                        if (Object.m_hand.Input.TouchpadDown && Object.m_hand.Input.TouchpadAxes.magnitude > 0.1f &&
+                            Vector2.Angle(Object.m_hand.Input.TouchpadAxes, Vector2.left) <=
+                            45f)
+                        {
+                            for (var j = 0; j < Animations.Count; j++)
+                            { if (!Reset && Animation.IsPlaying(Animations[j])) return; } //if one of the animations is playing, don't play another one until its done
+                            Animation.Play(Animations[i]);
+                            i++;
+                            if (PlaySound && Object is FVRFireArm)
+                            { Firearm.PlayAudioEvent(FirearmAudioEventType.FireSelector); }
+                            if (i >= Animations.Count) i = 0; //make sure the animations played are sequential and looping
+                        }
+                        break;
                     }
-                    break;
+                    case true:
+                        if (Object.m_hand.Input.AXButtonDown)
+                        {
+                            for (var j = 0; j < Animations.Count; j++)
+                            { if (!Reset && Animation.IsPlaying(Animations[j])) return; } //if one of the animations is playing, don't play another one until its done
+                            Animation.Play(Animations[i]);
+                            i++;
+                            if (PlaySound && Object is FVRFireArm)
+                            { Firearm.PlayAudioEvent(FirearmAudioEventType.FireSelector); }
+                            if (i >= Animations.Count) i = 0; //make sure the animations played are sequential and looping
+                        }
+                        break;
                 }
-                case true:
-                    if (Object.m_hand.Input.AXButtonDown)
-                    {
-                        for (var j = 0; j < Animations.Count; j++)
-                        { if (!Reset && Animation.IsPlaying(Animations[j])) return; } //if one of the animations is playing, don't play another one until its done
-                        Animation.Play(Animations[i]);
-                        i++;
-                        if (PlaySound && Object is FVRFireArm)
-                        { Firearm.PlayAudioEvent(FirearmAudioEventType.FireSelector); }
-                        if (i >= Animations.Count) i = 0; //make sure the animations played are sequential and looping
-                    }
-                    break;
             }
         }
     }
