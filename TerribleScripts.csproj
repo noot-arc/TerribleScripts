@@ -2,7 +2,7 @@
     <!-- Plugin name, version, etc. -->
     <PropertyGroup>
         <AssemblyName>TerribleScripts</AssemblyName>
-        <Version>0.2.8</Version>
+        <Version>0.2.9</Version>
         <Authors>nootarc</Authors>
         <AssemblyTitle>TerribleScripts</AssemblyTitle>
         <Description>Scripts for my H3VR mods. It's like i'm a real modder now!</Description>

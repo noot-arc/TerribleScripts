@@ -42,10 +42,10 @@ namespace TerribleScripts.ModMods
 
         public void Awake()
         {
-            if (LaserLights.Count > 0) LaserLightsAvailable = true;
+            if (LaserLights.Count > 0) LaserLightsAvailable = true; // so we dont have to check this every time
             if (Lines.Count > 0) LinesAvailable = true;
             if (Graphics.Count > 0) GraphicsAvailable = true;
-            EmissionColor = Shader.PropertyToID("_EmissionColor"); //so we dont have to do a string lookup
+            EmissionColor = Shader.PropertyToID("_EmissionColor"); // so we dont have to do a string lookup every time
         }
         public void Update() //once again i have 0 clue how to not do this in update
         {

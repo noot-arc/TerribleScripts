@@ -23,7 +23,7 @@ namespace TerribleScripts.Animations
         {
             if (firearm == Firearm)
             {
-                if (!Reset && Animation.IsPlaying(FireAnim)) return;
+                if (Reset == false && Animation.IsPlaying(FireAnim)) return;
                 Animation.Play(FireAnim); //thats literally it. all the """Fun""" bits are in the other scripts!
             }
         }
