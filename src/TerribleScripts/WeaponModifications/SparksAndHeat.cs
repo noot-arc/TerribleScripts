@@ -22,11 +22,16 @@ namespace TerribleScripts.WeaponModifications
         public float LoadedWeight = 1f;
         [Tooltip("Vice versa as above")]
         public float UnloadedWeight;
+        [Tooltip("Spinny Bit")] 
+        public GameObject Spinny;
+        public float RotPerFrame;
+        [HideInInspector] public float RotZ;
         [HideInInspector] public int EmissionWeight;
         [HideInInspector] public bool JustPlayed;
         [HideInInspector] public bool MeshAvailable;
         [HideInInspector] public bool AudioAvailable;
         [HideInInspector] public bool ParticlesAvailable;
+        [HideInInspector] public bool SpinnyAvailable;
 
         public void Awake()
         {
@@ -34,13 +39,16 @@ namespace TerribleScripts.WeaponModifications
             if (Mesh != null) MeshAvailable = true;
             if (Audio != null) AudioAvailable = true;
             if (Particles != null) ParticlesAvailable = true;
+            if (Spinny != null) SpinnyAvailable = true;
         }
 
         public void Update()
         {
+            
                 var PropBlock = new MaterialPropertyBlock();
                     if (FireArm.Magazine != null && FireArm.Magazine.LoadedRounds[0] != null && FireArm.Magazine.LoadedRounds[0].LR_Class == RoundClass) // im not explaining this one
                     {
+                        if (SpinnyAvailable) Spinny.transform.Rotate(0,0,RotPerFrame);
                         if (JustPlayed) return; // this ensures that the effects are only fired on one frame
                         PropBlock.SetFloat(EmissionWeight, LoadedWeight);
                         if (MeshAvailable) Mesh.SetPropertyBlock(PropBlock);
