@@ -2,36 +2,30 @@
 Personal H3VR modding scripts. @ me on discord for features/fixes.
 
 # Descriptions:
-
-## HCBBoltStuff
-### HCBBoltify
-- Instantiates HCB Bolts a-la the Meatnailer.
-- Needs companion script, `RoundHCBBoltType`, attached to your custom round, to work.
-### TrepangExplodeyBolt
-- Don't. Acts like an activated M340 when fired. Needs to be attached to a custom HCB Bolt round. Eats performance.
-## WeaponModifications
-### FakeMinigunSounds
-- Nothing yet, intended to be a facsimile of the minigun's audio source logic functions for other firearm types.
-### ReplenishFirearmMagazineAutomagically
-- Replenish the firearm's magazine while holding down or toggling a button, with some other additional features.
-- Put it somewhere in the firearm prefab.
-- Half-finished. I forgot. I think.
-### ToggleOnGrabRelease
-- Toggles (enables or disables) objects of your choosing when your object is picked up or released.
-### Duplicated Muzzle
-- Basically fires the same rounds that your main muzzle fires w/o interacting with the magazine/chamber.
-### Alternating Muzzle
-- Switches multiple muzzles sequentially. Kinda like those horizontal volley guns.
-### Sparks And Heat
-- Evil plugin. Do not.
-- Enables (and disables) a Particle Effect, an Audio Source and the Emissions Weight of a Mesh Renderer based on the Round Class currently loaded into the magazine of the firearm.
-## Mod Mods
-### AmmoCountUIColorShenanigans
-- Takes Graphics, Line Renderers & LaserLight objects, Gradients, and puts the color onto the objects from the gradient based on the current ammo amount percentage.
-## Animations
-### Anim Play On Button Press
-- Can use either A/X or B/Y for streamlined & any of the four touchpad directions for classic.
-### Anim Play On Fire
-- What it says on the tin.
-### Anim Play On Mag Insert Eject
-- The animations for insert and eject are separate (you can use the same one).
+im gonna stop formatting this shit im sorry</br>
+</br>
+Legacy Namespace:</br>
+calculatebdcc - an unneeded script, input bdcc should stay same</br>
+hcbboltify - make guns fire hcb bolts</br>
+roundhcbbolttype - make guns know what hcb bolt to fire on a round</br>
+trepangexplodeybolt - evil</br></br>
+Animations:</br>
+animplayonbuttonpress</br>
+animplayonfire</br>
+animplayonmaginserteject</br>
+ModMods:</br>
+ammocountuicolorshenanigans - change the color of some rende- WAIT WHY DIDNT I JUST INSTANTIATE UNIQUE MATERIALS FOR THAT SHIT- anyways change colors of some things like text and images based on the current ammo count</br>
+dropcompupdatebutton - drop comp reads a lot of shit that is only really needed to be accessed once</br>
+terribledropcomp - "black magic", does simple ballistic calculations in real time to display a truly accurate zeroing reticle</br>
+terriblerangefinder - basic raycast rangefinder, with 1m precision, a way to pair the scope color to the text color</br>
+WeaponModifications:</br>
+alternatingmuzzle - it alternates between muzzles</br>
+duplicatedmuzzle - it duplicates muzzles without impacting ammo stuff, just fire whatever the main muzzle is firing</br>
+ejectmagonempty</br>
+fakeminigunsounds - unfinished, bonk me if you want it to be finished</br>
+repleniishfirearmmagazineautomagically - unfinished, bonk me if you want it to be finished</br>
+sparks and heat - evil</br>
+toggleongrabrelease - why did i make this</br>
+Weapons:</br>
+grippablem203</br>
+grippablem203fore</br>
