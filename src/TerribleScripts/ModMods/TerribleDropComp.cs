@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using FistVR;
 using UnityEngine.UI;
@@ -10,13 +9,13 @@ namespace TerribleScripts.ModMods
         [Header("NOTE: Put this on dedicated GameObject anywhere in hierarchy")]
         [Tooltip("Your PIPScopeController.")]                                                                        public PIPScopeController ScopeController;
         [Tooltip("Max count of simulated frames. 90 = 1s.")]                                                         public int CalcFrames = 900;
+        [Tooltip("Artificial distance limit for drop compensation.")]                                                public float MaxDistance = 999f;
         [Header("OPTIONAL BIT")]
         [Tooltip("OPTIONAL: Text object that displays the distance between the approximate hit point and the muzzle. 1 metre precision. If you need any other precision or style of output feel free to bug me about it")] public Text DistanceDisplay;
         [Tooltip("String that will display after the numerical output.")]                                            public string Suffix = "m";
         [Tooltip("String that will display if the calculated distance is over the MaxDisplayDistance")]              public string MaxDistanceString = "---m";
-        [Tooltip("Maximum distance... DistanceDisplay can... display.")]                                             public float MaxDisplayDistance = 999f;
         [Tooltip("Flag this if you want your DistanceDisplay to have the same color as the current reticle color.")] public bool TextColorParity;
-        
+        public GameObject AuxWepDisplay;
         private FVRFireArm Firearm;
         private BallisticProjectile Projectile;
         private Vector3 Velocity;
@@ -40,13 +39,13 @@ namespace TerribleScripts.ModMods
         {
             if (ScopeController.Attachment != null && ScopeController.Attachment.curMount != null && ScopeController.Attachment.curMount.Parent is FVRFireArm) // this check is from the scope script idk why its so large
             { Firearm = ScopeController.Attachment.curMount.Parent as FVRFireArm; }
-            if (Firearm == null)
-            { DataAvailable = false; return; }
+            if (Firearm == null) { DataAvailable = false; return; }
             var Chamber = Firearm.GetChambers()[0];
+            var Magazine = Firearm.Magazine;
             FVRFireArmRound Round;
-            if (Chamber.GetRound() == null) 
+            if (Chamber != null && Chamber.GetRound() == null) 
             {
-                if (Firearm.Magazine != null && Firearm.Magazine.LoadedRounds[Firearm.Magazine.m_numRounds - 1] != null) Round = Firearm.Magazine.LoadedRounds[Firearm.Magazine.m_numRounds - 1].LR_ObjectWrapper.GetGameObject().GetComponent<FVRFireArmRound>();
+                if (Magazine != null && Magazine.LoadedRounds[Magazine.m_numRounds - 1] != null) Round = Magazine.LoadedRounds[Magazine.m_numRounds - 1].LR_ObjectWrapper.GetGameObject().GetComponent<FVRFireArmRound>();
                 else {DataAvailable = false; return;}
             }
             else Round = Chamber.GetRound();
@@ -59,24 +58,39 @@ namespace TerribleScripts.ModMods
             Density = 1.225f * Projectile.AirDragMultiplier; //SET 6: Get Projectile Density (for Air Drag calculations)
             VelocityMultiplier = Projectile.FlightVelocityMultiplier; //SET 7: Get Velocity Multiplier (e.g. for correctly calculating HCB Bolt projectile trajectories)
             GravityMultiplier = Projectile.GravityMultiplier; //SET 8: Get Gravity Multiplier (e.g. for correctly calculating HCB Bolt projectile trajectories)
-            //SET 9: Get current scene Ballistic Gravity
-            if (GM.Options.SimulationOptions.BallisticGravityMode == SimulationOptions.GravityMode.Realistic) Gravity = 9.81f;
-            else if (GM.Options.SimulationOptions.BallisticGravityMode == SimulationOptions.GravityMode.Playful) Gravity = 5f;
-            else if (GM.Options.SimulationOptions.BallisticGravityMode == SimulationOptions.GravityMode.OnTheMoon) Gravity = 1.622f;
-            else if (GM.Options.SimulationOptions.BallisticGravityMode == SimulationOptions.GravityMode.None) Gravity = 0f; 
+            switch (GM.Options.SimulationOptions.BallisticGravityMode)
+            {
+                //SET 9: Get current scene Ballistic Gravity
+                case SimulationOptions.GravityMode.Realistic:
+                    Gravity = 9.81f;
+                    break;
+                case SimulationOptions.GravityMode.Playful:
+                    Gravity = 5f;
+                    break;
+                case SimulationOptions.GravityMode.OnTheMoon:
+                    Gravity = 1.622f;
+                    break;
+                case SimulationOptions.GravityMode.None:
+                    Gravity = 0f;
+                    break;
+            }
+            DataAvailable = true;
+        }
+
+        private void Awake()
+        {
             //New instance of text object material for color parity reasons
             MatInstance = Instantiate(DistanceDisplay.material);
             Color = Shader.PropertyToID("_Color"); 
             DistanceDisplay.material = MatInstance;
             //Distance Display is optional
             if (DistanceDisplay != null) DDAvailable = true;
-            DataAvailable = true;
         }
 
         private void Update()
         {
             if (!TextColorParity) return; //it set color :thumbsup:
-            var ReticleColor = ScopeController.ReticleColors[ScopeController.ReticleColorIndex];
+            var ReticleColor = ScopeController.PScope.reticleIllumination;
             MatInstance.SetColor(Color, ReticleColor);
         }
 
@@ -97,26 +111,47 @@ namespace TerribleScripts.ModMods
                 if (b)
                 {
                     transform.position = Hit.point; //Not really required except for some debugging stuff
+                    Timer = 0f; // make sure lerping instantly stops as soon as a valid Thing is hit
+                    var Distance = Vector3.Distance(Firearm.MuzzlePos.transform.position, Hit.point);
+                    LastDistance = Distance;
+                    if (Distance >= MaxDistance) goto NOHIT;
+                    Timer = 0f; 
+                    if (DDAvailable) DistanceDisplay.text = $"{Distance:F0}{Suffix}";
                     // the bit below is shamelessly ripped from the scope script because what would i even do here
                     var UVVector = ScopeController.PScope.ZeroToWorldPoint(Hit.point);
                     var Elevation = ScopeController.ReticleElevationMagnitude * ScopeController.ReticleElevationAdjustmentPerTick;
                     var Windage = ScopeController.ReticleWindageMagnitude * ScopeController.ReticleWindageAdjustmentPerTick;
-                    if (ScopeController.ZeroScaling == PipScopeZeroScaling.MOA) Elevation *= 0.016666668f;
-                    else if (ScopeController.ZeroScaling == PipScopeZeroScaling.MIL) Elevation *= 0.05625f;
-                    else if (ScopeController.ZeroScaling == PipScopeZeroScaling.MRAD) Elevation *= 0.05729578f;
-                    if (ScopeController.ZeroScaling == PipScopeZeroScaling.MOA) Windage *= 0.016666668f;
-                    else if (ScopeController.ZeroScaling == PipScopeZeroScaling.MIL) Windage *= 0.05625f;
-                    else if (ScopeController.ZeroScaling == PipScopeZeroScaling.MRAD) Windage *= 0.05729578f;
+                    switch (ScopeController.ZeroScaling)
+                    {
+                        case PipScopeZeroScaling.MOA:
+                            Elevation *= 0.016666668f;
+                            break;
+                        case PipScopeZeroScaling.MIL:
+                            Elevation *= 0.05625f;
+                            break;
+                        case PipScopeZeroScaling.MRAD:
+                            Elevation *= 0.05729578f;
+                            break;
+                    }
+                    switch (ScopeController.ZeroScaling)
+                    {
+                        case PipScopeZeroScaling.MOA:
+                            Windage *= 0.016666668f;
+                            break;
+                        case PipScopeZeroScaling.MIL:
+                            Windage *= 0.05625f;
+                            break;
+                        case PipScopeZeroScaling.MRAD:
+                            Windage *= 0.05729578f;
+                            break;
+                    }
                     ScopeController.PScope.reticleAdjustmentDegrees = new Vector2(UVVector.x + Windage, UVVector.y + Elevation);
                     // end of shamelessly ripped bit
-                    Timer = 0f; // make sure lerping instantly stops as soon as a valid Thing is hit
-                    var Distance = Vector3.Distance(Firearm.MuzzlePos.transform.position, Hit.point);
-                    LastDistance = Distance;
-                    if (DDAvailable) DistanceDisplay.text = Distance >= MaxDisplayDistance ? $"{LerpMaxDistance()}" : $"{Distance:F0}{Suffix}";
                     return;
                 }
                 transform.position = NextPos; //Repeat cycle
             }
+            NOHIT:
             if (DDAvailable) DistanceDisplay.text = $"{LerpMaxDistance()}";
             ScopeController.FixedBaseZero = 100f;
             ScopeController.UpdateScopeParams();
@@ -126,7 +161,7 @@ namespace TerribleScripts.ModMods
             Timer += Time.deltaTime;
             if (Timer < 1f)
             {
-                return $"{Mathf.Lerp(LastDistance, MaxDisplayDistance, Timer):F0}{Suffix}";
+                return $"{Mathf.Lerp(LastDistance, MaxDistance, Timer):F0}{Suffix}";
             }
             Timer = 1f;
             return MaxDistanceString;

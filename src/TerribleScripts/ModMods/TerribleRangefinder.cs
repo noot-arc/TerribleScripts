@@ -41,7 +41,7 @@ namespace TerribleScripts.ModMods
             if (!ScopeAvailable) {return;}
             if (ScopeController.Attachment != null && ScopeController.Attachment.curMount != null && ScopeController.Attachment.curMount.Parent is FVRFireArm) // this check is from the scope script idk why its so large
             { Firearm = ScopeController.Attachment.curMount.Parent as FVRFireArm; }
-            MatInstance.SetColor(ColorProperty, ScopeController.ReticleColors[ScopeController.ReticleColorIndex]);
+            MatInstance.SetColor(ColorProperty, ScopeController.PScope.reticleIllumination);
             if (Firearm == null) { RangefinderPos = FallbackPos; return;}
             RangefinderPos.position = Firearm.MuzzlePos.position;
             RangefinderPos.rotation = Firearm.MuzzlePos.rotation;
