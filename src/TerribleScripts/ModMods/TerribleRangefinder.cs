@@ -13,6 +13,8 @@ namespace TerribleScripts.ModMods
         [Tooltip("Your Text Object.")]                                                                                         public Text DistanceDisplay;
         [Tooltip("Point from which rangefinding calculations happen.")]                                                        public Transform RangefinderPos;
         [Tooltip("OPTIONAL: PIPScope controller for color parity & rangefinding at the muzzle.")]                              public PIPScopeController ScopeController;
+        [Tooltip("If PIPScope Controller is enabled, would you like to use the reticle's color as the Text color?")]           public bool UseReticleColor;
+        [Tooltip("If Scope Controller is set, would u like to use the mounted firearm's muzzle as the Rangefinder Pos?")]      public bool UseMuzzlePos;
         [HideInInspector] public FVRFireArm Firearm;
         [HideInInspector] public int ColorProperty;
         [HideInInspector] public Material MatInstance;
@@ -41,10 +43,11 @@ namespace TerribleScripts.ModMods
             if (!ScopeAvailable) {return;}
             if (ScopeController.Attachment != null && ScopeController.Attachment.curMount != null && ScopeController.Attachment.curMount.Parent is FVRFireArm) // this check is from the scope script idk why its so large
             { Firearm = ScopeController.Attachment.curMount.Parent as FVRFireArm; }
-            MatInstance.SetColor(ColorProperty, ScopeController.PScope.reticleIllumination);
-            if (Firearm == null) { RangefinderPos = FallbackPos; return;}
+            if (!UseMuzzlePos || Firearm == null) { RangefinderPos = FallbackPos; return;}
             RangefinderPos.position = Firearm.MuzzlePos.position;
             RangefinderPos.rotation = Firearm.MuzzlePos.rotation;
+            if (!UseReticleColor) return;
+            MatInstance.SetColor(ColorProperty, ScopeController.PScope.reticleIllumination);
         }
 
         public void FixedUpdate()
